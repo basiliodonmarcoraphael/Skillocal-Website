@@ -131,4 +131,23 @@ public interface ApiServiceWorker {
             @Body User user
     );
 
+    //    FOR JOB APPLICATION DETAILS TABLE - Job Application/Job Seeker Information
+    @GET("JobApplicationDetails")
+    Call<List<JobApplicationDetails>> getJobApplicationDetailsByUserId(
+            @Query("select") String select,
+            @Query("user_id") String userIdFilter
+    );
+
+//    @PATCH("JobApplicationDetails")
+//    Call<Void> updateJobApplicationDetailsByJobApplicationId(
+//            @Query("job_application_details_id") String eqFilter,  // example: "eq.123"
+//            @Body JobApplicationDetails jobApplicationDetails
+//    );
+
+    @PATCH("JobApplicationDetails")
+    Call<Void> updateJobApplicationDetailsByJobApplicationId(
+            @Query("job_application_details_id") String filter,
+            @Body JobApplicationDetails details
+    );
+
 }

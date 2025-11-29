@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Job Title -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Job Title"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+        <TextView
+            android:id="@+id/tv_job_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/panel_gray"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Establishment -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Establishment"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+        <TextView
+            android:id="@+id/tv_establishment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/panel_gray"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Industry -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Industry"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+        <TextView
+            android:id="@+id/tv_industry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/panel_gray"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Location -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/panel_gray"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Employment Type -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Employment Type"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+        <TextView
+            android:id="@+id/tv_employment_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/panel_gray"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Status -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/panel_gray"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Job Description / Remarks -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Job Description"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+        <TextView
+            android:id="@+id/tv_remarks"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@color/panel_gray"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:gravity="top|start"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Created Date -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Created Date"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+        <TextView
+            android:id="@+id/tv_created_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/panel_gray"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Reviewed Date -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reviewed Date"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+        <TextView
+            android:id="@+id/tv_reviewed_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/panel_gray"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Reviewed By -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reviewed By"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+        <TextView
+            android:id="@+id/tv_reviewed_by"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/panel_gray"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Apply Button -->
+        <Button
+            android:id="@+id/btn_apply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Apply"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:layout_marginTop="10dp"
+            android:padding="12dp"/>
+    </LinearLayout>
+</ScrollView>
