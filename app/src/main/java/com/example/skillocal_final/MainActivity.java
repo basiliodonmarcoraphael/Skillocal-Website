@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuItem jApplication = menu.findItem(R.id.nav_job_application);
         MenuItem jMatch = menu.findItem(R.id.nav_job_matching);
         MenuItem jobsApplied = menu.findItem(R.id.nav_jobs_applied); // NEW
+        MenuItem applicantList = menu.findItem(R.id.nav_applicants_list); // NEW
 
         //Item to Hide based on role
         if(role.equals("Employer")){
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             estItem.setVisible(false);
             empProf.setVisible(false);
             jobVacant.setVisible(false);
+            applicantList.setVisible(false);
         }
 
         // Kebab menu logout
