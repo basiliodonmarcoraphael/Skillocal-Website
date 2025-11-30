@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +25,10 @@ public class ApplicantsListActivity extends AppCompatActivity {
     private List<JobApplication> jobApplicants;
     private List<User> userList;
 
+    private List<WorkExperience> workExpList;
+
     ApiService apiExt = ApiInstance.getApi();
+    ApiServiceWorker apiWorker = ApiInstance.getApiWorker();
 
     public User findUserById(List<User> users, int userId) {
         if (users == null) return null;
@@ -35,6 +39,44 @@ public class ApplicantsListActivity extends AppCompatActivity {
             }
         }
         return null; // not found
+    }
+
+    private String getWorkExpList(List<WorkExperience> wkList, int id){
+        Log.d("Test", String.valueOf(id));
+        if(wkList.isEmpty()){
+            return "NO EXPERIENCED";
+        }
+        String workList = "";
+        for(WorkExperience e: wkList){
+            if(e.getUserId() == id){
+                if(TextUtils.isEmpty(workList)){
+                    workList = e.getPosition();
+                }
+                workList = workList+ ", "+ e.getPosition();
+            }
+        }
+        if(TextUtils.isEmpty(workList)){
+            return "NO EXPERIENCED";
+        }
+        return workList;
+    }
+
+    private void getAllWorkExperience(){
+        // Load Jobs
+        apiWorker.getAllWorkExperience("*")
+                .enqueue(new Callback<List<WorkExperience>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<WorkExperience>> call, @NonNull Response<List<WorkExperience>> response) {
+                        if (response.isSuccessful()) {
+                            workExpList = response.body();
+                            getAllUsers();
+                        }
+                    }
+                    @Override
+                    public void onFailure(@NonNull Call<List<WorkExperience>> call, @NonNull Throwable t) {
+                        Log.e("API", "Failed: " + t.getMessage());
+                    }
+                });
     }
 
     private void getAllUsers(){
@@ -50,7 +92,8 @@ public class ApplicantsListActivity extends AppCompatActivity {
                             List<Applicant> applicants = new ArrayList<>();
                             for(JobApplication e: jobApplicants){
                                 String myEmail = findUserById(userList, e.getUser_id()).getEmail();
-                                applicants.add(new Applicant(e.getFirstName()+ " "+ e.getMiddleName()+ " "+ e.getLastName(), myEmail, "Resume: Experienced Barista"));
+                                String expWork = getWorkExpList(workExpList, e.getUser_id());
+                                applicants.add(new Applicant(e.getFirstName()+ " "+ e.getMiddleName()+ " "+ e.getLastName(), myEmail, "Resume: "+ expWork));
                             }
 
                             // Add applicants to layout
@@ -82,7 +125,7 @@ public class ApplicantsListActivity extends AppCompatActivity {
         ImageView iconBack = findViewById(R.id.icon_back_applicants);
         iconBack.setOnClickListener(v -> finish());
 
-        getAllUsers();
+        getAllWorkExperience();
     }
 
     private void addApplicantCard(Applicant applicant) {
