@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -27,21 +29,30 @@
         android:gravity="end">
 
         <ImageView
+            android:id="@+id/btn_applicant"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="Edit"
+            android:src="@drawable/ic_manage_users"
+            app:tint="#4E7DEB" />
+
+        <ImageView
             android:id="@+id/btn_edit_job"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_edit"
-            android:contentDescription="edit job"
-            android:padding="4dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginEnd="16dp"
+            android:contentDescription="Edit"
+            app:tint="@color/highlight" />
 
         <ImageView
             android:id="@+id/btn_delete_job"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_delete"
-            android:contentDescription="delete job"
-            android:padding="4dp" />
+            android:contentDescription="Delete"
+            app:tint="@color/accent" />
     </LinearLayout>
 
 </LinearLayout>

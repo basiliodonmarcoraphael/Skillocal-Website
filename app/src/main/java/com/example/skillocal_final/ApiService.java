@@ -17,6 +17,12 @@ public interface ApiService {
             @Query("select") String select            // usually: "*"
     );
 
+    //Get All Users
+    @GET("Users")
+    Call<List<User>> getAllUsers(
+            @Query("select") String select            // usually: "*"
+    );
+
     //    FOR USERS TABLE - Manage Employee Profile
     @GET("Users")
     Call<List<User>> getUserByUserId(
@@ -74,6 +80,10 @@ public interface ApiService {
     );
 
 
-
+    @GET("JobVacancy")
+    Call<List<JobVacancy>> getAllJobVacancy(
+            @Query("select") String select,
+            @Query("status") String statusFilter
+    );
 
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -21,8 +22,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    ApiService api = ApiInstance.getApi();
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ImageView iconMenu, iconKebab;
@@ -32,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String PREFS_NAME = "SkillocalPrefs";
     private static final String KEY_ESTABLISHMENTS = "establishments_per_user";
     private static final String KEY_JOBS = "jobs_per_user";
+
+    int establishmentCount;
+    int vacancyCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuItem jMatch = menu.findItem(R.id.nav_job_matching);
         MenuItem jobsApplied = menu.findItem(R.id.nav_jobs_applied); // NEW
         MenuItem applicantList = menu.findItem(R.id.nav_applicants_list); // NEW
+        applicantList.setVisible(false);
 
         //Item to Hide based on role
         if(role.equals("Employer")){
@@ -105,43 +116,77 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             popup.show();
         });
 
-        // Load live counts
-        updateCounts();
+
+        loadEstablishments(new CountCallback() {
+            @Override
+            public void onSuccess(int count) {
+                Log.e("API", "Final count = " + count);
+                // NOW YOU CAN USE THE VALUE HERE
+                establishmentCount = count;
+
+                loadJobVacancies(new CountCallback() {
+                    @Override
+                    public void onSuccess(int count) {
+                        Log.e("API", "Final count = " + count);
+                        // NOW YOU CAN USE THE VALUE HERE
+                        vacancyCount = count;
+
+                        // Load live counts
+                        updateCounts();
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        Log.e("API", "Error: " + msg);
+                    }
+                });
+
+
+            }
+
+            @Override
+            public void onError(String msg) {
+                Log.e("API", "Error: " + msg);
+            }
+        });
+
+
+
     }
 
     private void updateCounts() {
-        String userEmail = getSharedPreferences("UserSession", MODE_PRIVATE)
-                .getString("email", "guest@user.com");
-
-        int estCount = 0;
-        int jobCount = 0;
+//        String userEmail = getSharedPreferences("UserSession", MODE_PRIVATE)
+//                .getString("email", "guest@user.com");
+//
+//        int estCount = 0;
+//        int jobCount = 0;
 
         // Count establishments
-        String estJson = sharedPreferences.getString(KEY_ESTABLISHMENTS, "{}");
-        try {
-            JSONObject json = new JSONObject(estJson);
-            if (json.has(userEmail)) {
-                JSONArray arr = json.getJSONArray(userEmail);
-                estCount = arr.length();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        String estJson = sharedPreferences.getString(KEY_ESTABLISHMENTS, "{}");
+//        try {
+//            JSONObject json = new JSONObject(estJson);
+//            if (json.has(userEmail)) {
+//                JSONArray arr = json.getJSONArray(userEmail);
+//                estCount = arr.length();
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        // Count jobs
+//        String jobJson = sharedPreferences.getString(KEY_JOBS, "{}");
+//        try {
+//            JSONObject json = new JSONObject(jobJson);
+//            if (json.has(userEmail)) {
+//                JSONArray arr = json.getJSONArray(userEmail);
+//                jobCount = arr.length();
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
-        // Count jobs
-        String jobJson = sharedPreferences.getString(KEY_JOBS, "{}");
-        try {
-            JSONObject json = new JSONObject(jobJson);
-            if (json.has(userEmail)) {
-                JSONArray arr = json.getJSONArray(userEmail);
-                jobCount = arr.length();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        tvEstCount.setText("Establishments\n" + estCount);
-        tvJobCount.setText("Job Postings\n" + jobCount);
+        tvEstCount.setText("Establishments\n" + establishmentCount);
+        tvJobCount.setText("Job Postings\n" + vacancyCount);
     }
 
     @Override
@@ -175,6 +220,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.closeDrawers();
         return true;
+    }
+
+
+
+
+    private void loadEstablishments(CountCallback callback) {
+        api.getAllEstablishment("*", "establishment_id.asc")
+                .enqueue(new Callback<List<Establishment>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<Establishment>> call, @NonNull Response<List<Establishment>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            int count = response.body().size();
+                            establishmentCount = count;
+                            callback.onSuccess(count);
+                        } else {
+                            callback.onError("Failed to load");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<Establishment>> call, @NonNull Throwable t) {
+                        callback.onError(t.getMessage());
+                    }
+                });
+    }
+
+
+    private void loadJobVacancies(CountCallback callback) {
+        api.getAllJobVacancy("*", "not.eq.Deleted")
+                .enqueue(new Callback<List<JobVacancy>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<JobVacancy>> call, @NonNull Response<List<JobVacancy>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            int count = response.body().size();
+                            vacancyCount = count;
+                            callback.onSuccess(count);
+                        } else {
+                            callback.onError("Failed to load");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<JobVacancy>> call, @NonNull Throwable t) {
+                        callback.onError(t.getMessage());
+                    }
+                });
+    }
+
+    public interface CountCallback {
+        void onSuccess(int count);
+        void onError(String msg);
     }
 
 }

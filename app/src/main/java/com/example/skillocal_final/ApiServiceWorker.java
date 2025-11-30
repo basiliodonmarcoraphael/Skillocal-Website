@@ -6,6 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -148,6 +149,58 @@ public interface ApiServiceWorker {
     Call<Void> updateJobApplicationDetailsByJobApplicationId(
             @Query("job_application_details_id") String filter,
             @Body JobApplicationDetails details
+    );
+
+    //worker's list of job vacancies coming from employers
+    @GET("JobVacancy")
+    Call<List<JobVacancy>> getAllJobVacancy(
+            @Query("select") String select,
+            @Query("status") String statusFilter,
+            @Query("order") String order
+    );
+
+    @GET("Establishment")
+    Call<List<Establishment>> getEstablishmentByEstablishment(
+            @Query("select") String select
+
+    );
+
+    //checking for duplicate applications
+    @GET("JobApplication")
+    Call<List<JobApplicationInterfaceWorker>> getJobApplicationDuplicates(
+            @Query("select") String select,
+            @Query("user_id") String userIdFilter,
+            @Query("job_vacancy_id") String vacancyIdFilter
+//            @Query("order") String order
+
+
+    );
+
+    @Headers("Prefer: return=representation")
+    @POST("JobApplication")
+    Call<List<JobApplicationInterfaceWorker>> insertJobApplication(
+            @Body JobApplicationInterfaceWorker body
+    );
+
+
+    //get list of jobs applied by Id
+    @GET("JobApplication")
+    Call<List<JobApplicationInterfaceWorker>> getJobApplicationsById(
+            @Query("select") String select,
+            @Query("user_id") String userIdFilter,
+            @Query("order") String order
+    );
+
+    @GET("Establishment")
+    Call<List<Establishment>> getEstablishmentByEstablishmentId(
+            @Query("select") String select,
+            @Query("establishment_id") String establishmentIdFilter
+    );
+
+    @GET("JobVacancy")
+    Call<List<JobVacancy>> getJobVacancyByVacancyId(
+            @Query("select") String select,
+            @Query("vacancy_id") String vacancyIdFilter
     );
 
 }
