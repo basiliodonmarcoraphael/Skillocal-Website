@@ -242,8 +242,9 @@ public class JobVacancyActivity extends AppCompatActivity {
                 return;
             }
 
-            JobVacancy job = new JobVacancy(currentId, estID, status, loc, remark, reviewed, reviewedBy, title, indID,
-                    empTypeName, created);
+            JobVacancy job = new JobVacancy(
+                     estID, status, remark, created, reviewed, reviewedBy, title, indID, loc,
+                    empTypeName, currentId);
 
             if (jobObj == null) saveJobs(job);
             else updateJobVacancy(job, jobObj.getVacancy_id());
