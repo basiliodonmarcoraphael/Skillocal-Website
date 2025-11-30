@@ -5,20 +5,30 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Calendar;
 
-public class CreateAccountActivity extends AppCompatActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+public class CreateAccountActivity extends AppCompatActivity {
+    ApiService api = ApiInstance.getApi();
     private EditText etFirstName, etMiddleInitial, etSurname, etAddress, etPhone, etBirthday, etEmail;
     private EditText etPassword, etConfirmPassword;
     private Spinner spinnerSex;
@@ -73,18 +83,21 @@ public class CreateAccountActivity extends AppCompatActivity {
         // Create Account Button
         btnCreateAccount.setOnClickListener(v -> {
             String firstName = etFirstName.getText().toString().trim();
-            String middleInitial = etMiddleInitial.getText().toString().trim();
-            String surname = etSurname.getText().toString().trim();
+            String middleName = etMiddleInitial.getText().toString().trim();
+            String lastName = etSurname.getText().toString().trim();
             String address = etAddress.getText().toString().trim();
-            String phone = etPhone.getText().toString().trim();
-            String birthday = etBirthday.getText().toString().trim();
+            String contact_number = etPhone.getText().toString().trim();
+            String birthDate = etBirthday.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
-            String gender = spinnerSex.getSelectedItem().toString();
+            String sex = spinnerSex.getSelectedItem().toString();
             String password = etPassword.getText().toString();
             String confirmPassword = etConfirmPassword.getText().toString();
+            String role = "Worker";
+
+
 
             // Validation
-            if (firstName.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -100,42 +113,73 @@ public class CreateAccountActivity extends AppCompatActivity {
             }
 
             // Save new employee to SharedPreferences
-            try {
-                String jsonString = sharedPreferences.getString(KEY_EMPLOYEES, "[]");
-                JSONArray employeeArray = new JSONArray(jsonString);
+//            try {
+//                String jsonString = sharedPreferences.getString(KEY_EMPLOYEES, "[]");
+//                JSONArray employeeArray = new JSONArray(jsonString);
+//
+//                JSONObject employee = new JSONObject();
+//                employee.put("firstName", firstName);
+//                employee.put("middleInitial", middleInitial);
+//                employee.put("surname", surname);
+//                employee.put("address", address);
+//                employee.put("phone", phone);
+//                employee.put("birthday", birthday);
+//                employee.put("email", email);
+//                employee.put("gender", gender);
+//                employee.put("password", password); // optional, for login
+//
+//                employeeArray.put(employee);
+//
+//                sharedPreferences.edit().putString(KEY_EMPLOYEES, employeeArray.toString()).apply();
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//                Toast.makeText(this, "Error saving employee", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
 
-                JSONObject employee = new JSONObject();
-                employee.put("firstName", firstName);
-                employee.put("middleInitial", middleInitial);
-                employee.put("surname", surname);
-                employee.put("address", address);
-                employee.put("phone", phone);
-                employee.put("birthday", birthday);
-                employee.put("email", email);
-                employee.put("gender", gender);
-                employee.put("password", password); // optional, for login
+            UserRegistration newUser = new UserRegistration(
+                    email, password, role, firstName, middleName, lastName, birthDate, sex, address,
+                    contact_number);
+            api.registerUser(newUser).enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                    if (response.isSuccessful()){
+                        Toast.makeText(CreateAccountActivity.this, "Employee account created", Toast.LENGTH_SHORT).show();
 
-                employeeArray.put(employee);
 
-                sharedPreferences.edit().putString(KEY_EMPLOYEES, employeeArray.toString()).apply();
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Error saving employee", Toast.LENGTH_SHORT).show();
-                return;
-            }
+                        // Go to Login Screen
+                        startActivity(new Intent(CreateAccountActivity.this, LoginActivity.class));
+                        finish();
 
-            Toast.makeText(this, "Employee account created!", Toast.LENGTH_SHORT).show();
 
-            // Open ManageEmployerProfileActivity
-            startActivity(new Intent(CreateAccountActivity.this, ManageEmployerProfileActivity.class));
-            finish();
+                    }else{
+                        Log.e("API", "Error body: " + response.errorBody());
+                        Toast.makeText(CreateAccountActivity.this, "Employee account failed!", Toast.LENGTH_SHORT).show();
+                        try {
+                            String error = response.errorBody() != null ? response.errorBody().string() : "No error body";
+                            Log.e("API", "Error body: " + error);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                    Toast.makeText(CreateAccountActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
         });
 
-        // Go to Login Screen
-        tvSignIn.setOnClickListener(v -> {
-            startActivity(new Intent(CreateAccountActivity.this, LoginActivity.class));
-            finish();
-        });
+
+                        tvSignIn.setOnClickListener(v -> {
+ startActivity(new Intent(CreateAccountActivity.this, LoginActivity.class));
+        finish();
+                        });
+
+
     }
 }

@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void fetchLogin(String inputEmail, String pass, Context cont) {
         ApiService api = ApiInstance.getApi();
-        api.loginUser(inputEmail, pass, "*").enqueue(new Callback<List<User>>() {
+        api.loginUser(inputEmail, pass, "*", "eq.Active").enqueue(new Callback<List<User>>() {
             @Override
             public void onResponse(@NonNull Call<List<User>> call, @NonNull Response<List<User>> response) {
                 SharedPreferences prefs = getSharedPreferences("MyRole", MODE_PRIVATE);
@@ -67,12 +67,12 @@ public class LoginActivity extends AppCompatActivity {
                             prgLogin.setVisibility(INVISIBLE);
                             finish();
                         } else {
-                            Toast.makeText(cont, "Invalid email or password", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(cont, "Invalid account, email or password", Toast.LENGTH_SHORT).show();
                             btnLogin.setVisibility(VISIBLE);
                             prgLogin.setVisibility(INVISIBLE);
                         }
                     } else {
-                        Toast.makeText(cont, "Invalid email or password", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(cont, "Invalid account, email or password", Toast.LENGTH_SHORT).show();
                         btnLogin.setVisibility(VISIBLE);
                         prgLogin.setVisibility(INVISIBLE);
                     }

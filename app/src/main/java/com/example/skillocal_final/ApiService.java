@@ -14,7 +14,8 @@ public interface ApiService {
     Call<List<User>> loginUser(
             @Query("email") String emailFilter,      // example: "eq.kenth@gmail.com"
             @Query("password") String passwordFilter, // example: "eq.1234"
-            @Query("select") String select            // usually: "*"
+            @Query("select") String select   ,
+            @Query("status") String statusFilter// usually: "*"
     );
 
     //Get All Users
@@ -85,5 +86,9 @@ public interface ApiService {
             @Query("select") String select,
             @Query("status") String statusFilter
     );
+
+    @POST("Users")
+    Call<Void> registerUser(@Body UserRegistration user);
+
 
 }
