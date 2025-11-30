@@ -76,29 +76,26 @@ public class JobsAppliedActivity extends AppCompatActivity {
         TextView tvJobInfo = itemView.findViewById(R.id.tv_job_name);
         ImageView btnEdit = itemView.findViewById(R.id.btn_edit_job);
         ImageView btnDelete = itemView.findViewById(R.id.btn_delete_job);
+        ImageView btnApplicant = itemView.findViewById(R.id.btn_applicant);
 
-        DateTimeFormatter inFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
-        DateTimeFormatter outFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        OffsetDateTime date = OffsetDateTime.parse(dateCreated, inFmt);
-        String formattedDate = date.format(outFmt);
+//        DateTimeFormatter inFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
+//        DateTimeFormatter outFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//
+//        OffsetDateTime date = OffsetDateTime.parse(dateCreated, inFmt);
+//        String formattedDate = date.format(outFmt);
 
         String info = jobTitle + " at " + establishmentName + " - " + vacancyStatus
                 + "\nLocation: " + location
                 + "\nEmployment Type: " + employment_type
                 + "\nRemarks: " + (remarks != null ? remarks : "N/A")
-                + "\nPosted: " + formattedDate
+                + "\nPosted: " + dateCreated
                 + "\nApplication Status: " + applicationStatus;
 
 
         tvJobInfo.setText(info);
-
-//        btnEdit.setOnClickListener(v -> showJobDialog(job));
-//        btnDelete.setOnClickListener(v -> {
-//            deleteJobVacancy(job.getVacancy_id());
-//            layoutJobs.removeView(itemView);
-//            jobs.remove(job);
-//        });
+        btnApplicant.setVisibility(View.GONE);
+        btnEdit.setVisibility(View.GONE);
+        btnDelete.setVisibility(View.GONE);
 
         layoutAppliedJobs.addView(itemView);
     }

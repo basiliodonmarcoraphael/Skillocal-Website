@@ -104,10 +104,6 @@
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.skillocal_final.app-main-34:\\drawable\\ic_person.xml"
     },
     {
-        "merged": "com.example.skillocal_final.app-debug-32:/layout_activity_job_application.xml.flat",
-        "source": "com.example.skillocal_final.app-main-34:/layout/activity_job_application.xml"
-    },
-    {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.skillocal_final.app-debug-32:\\drawable_ic_people.xml.flat",
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.skillocal_final.app-main-34:\\drawable\\ic_people.xml"
     },
@@ -354,6 +350,10 @@
     {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.skillocal_final.app-debug-32:\\menu_kebab_menu.xml.flat",
         "source": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.skillocal_final.app-main-34:\\menu\\kebab_menu.xml"
+    },
+    {
+        "merged": "com.example.skillocal_final.app-debug-32:/layout_item_job_vacancy.xml.flat",
+        "source": "com.example.skillocal_final.app-main-34:/layout/item_job_vacancy.xml"
     },
     {
         "merged": "C:\\Users\\HP\\.gradle\\daemon\\8.11.1\\com.example.skillocal_final.app-debug-32:\\drawable_ic_add.xml.flat",

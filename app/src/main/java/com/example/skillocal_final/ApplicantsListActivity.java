@@ -44,19 +44,21 @@ public class ApplicantsListActivity extends AppCompatActivity {
     private String getWorkExpList(List<WorkExperience> wkList, int id){
         Log.d("Test", String.valueOf(id));
         if(wkList.isEmpty()){
-            return "NO EXPERIENCED";
+            return "No Work Experience";
         }
         String workList = "";
         for(WorkExperience e: wkList){
             if(e.getUserId() == id){
                 if(TextUtils.isEmpty(workList)){
-                    workList = e.getPosition();
+                    workList = e.getPosition() + " at " + e.getCompany();
+                } else {
+                    workList = workList+ ", "+ e.getPosition() + " at " + e.getCompany();
                 }
-                workList = workList+ ", "+ e.getPosition();
+
             }
         }
         if(TextUtils.isEmpty(workList)){
-            return "NO EXPERIENCED";
+            return "No Work Experience";
         }
         return workList;
     }
@@ -93,7 +95,7 @@ public class ApplicantsListActivity extends AppCompatActivity {
                             for(JobApplication e: jobApplicants){
                                 String myEmail = findUserById(userList, e.getUser_id()).getEmail();
                                 String expWork = getWorkExpList(workExpList, e.getUser_id());
-                                applicants.add(new Applicant(e.getFirstName()+ " "+ e.getMiddleName()+ " "+ e.getLastName(), myEmail, "Resume: "+ expWork));
+                                applicants.add(new Applicant(e.getFirstName()+ " "+ e.getMiddleName()+ " "+ e.getLastName(), myEmail, "Work Experience: "+ expWork));
                             }
 
                             // Add applicants to layout
