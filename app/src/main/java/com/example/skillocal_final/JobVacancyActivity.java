@@ -94,28 +94,6 @@ public class JobVacancyActivity extends AppCompatActivity {
     }
 
     private void loadJobs() {
-        // Load Jobs
-        api.getAllJobVacancyByUserId("*", "eq." + currentId, "vacancy_id.asc")
-                .enqueue(new Callback<List<JobVacancy>>() {
-                    @Override
-                    public void onResponse(@NonNull Call<List<JobVacancy>> call, @NonNull Response<List<JobVacancy>> response) {
-                        if (response.isSuccessful()) {
-                            List<JobVacancy> resList = response.body();
-                            layoutJobs.removeAllViews();
-                            jobs.clear();
-                            assert resList != null;
-                            for (JobVacancy e : resList) {
-                                jobs.add(e);
-                                addJobToLayout(e);
-                            }
-                        }
-                    }
-                    @Override
-                    public void onFailure(@NonNull Call<List<JobVacancy>> call, @NonNull Throwable t) {
-                        Log.e("API", "Failed: " + t.getMessage());
-                    }
-                });
-
         // Load Establishments
         apiExt.getEstablishmentByUserId("*", "eq." + currentId, "not.eq.Deleted", "establishment_id.asc")
                 .enqueue(new Callback<List<Establishment>>() {
@@ -140,6 +118,28 @@ public class JobVacancyActivity extends AppCompatActivity {
                 Log.e("API", "Failed: " + t.getMessage());
             }
         });
+
+        // Load Jobs
+        api.getAllJobVacancyByUserId("*", "eq." + currentId, "vacancy_id.asc")
+                .enqueue(new Callback<List<JobVacancy>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<JobVacancy>> call, @NonNull Response<List<JobVacancy>> response) {
+                        if (response.isSuccessful()) {
+                            List<JobVacancy> resList = response.body();
+                            layoutJobs.removeAllViews();
+                            jobs.clear();
+                            assert resList != null;
+                            for (JobVacancy e : resList) {
+                                jobs.add(e);
+                                addJobToLayout(e);
+                            }
+                        }
+                    }
+                    @Override
+                    public void onFailure(@NonNull Call<List<JobVacancy>> call, @NonNull Throwable t) {
+                        Log.e("API", "Failed: " + t.getMessage());
+                    }
+                });
     }
 
     private void addJobToLayout(JobVacancy job) {
@@ -280,6 +280,7 @@ public class JobVacancyActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<JobVacancy> call, @NonNull Throwable t) {
                 Log.e("API", "Network error: " + t.getMessage());
+                loadJobs();
             }
         });
     }
