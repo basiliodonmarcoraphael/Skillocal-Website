@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void loadJobVacancies(CountCallback callback) {
-        api.getAllJobVacancy("*")
+        api.getAllJobVacancy("*", "not.eq.Deleted")
                 .enqueue(new Callback<List<JobVacancy>>() {
                     @Override
                     public void onResponse(@NonNull Call<List<JobVacancy>> call, @NonNull Response<List<JobVacancy>> response) {

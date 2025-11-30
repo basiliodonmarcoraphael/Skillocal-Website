@@ -200,7 +200,7 @@ public class JobMatchingEmployeeActivity extends AppCompatActivity {
     }
 
     private void loadJobs() {
-        api.getAllJobVacancy("*", "vacancy_id.asc")
+        api.getAllJobVacancy("*", "not.eq.Deleted", "vacancy_id.asc")
                 .enqueue(new Callback<List<JobVacancy>>() {
                     @Override
                     public void onResponse(@NonNull Call<List<JobVacancy>> call, @NonNull Response<List<JobVacancy>> response) {

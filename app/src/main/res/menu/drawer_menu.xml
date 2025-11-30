@@ -61,7 +61,7 @@
 
                 <item
                     android:id="@+id/nav_job_application"
-                    android:title="Job Application"
+                    android:title="Bio Data"
                     android:icon="@drawable/ic_job_application" />
 
                 <item
