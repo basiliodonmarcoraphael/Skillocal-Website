@@ -74,6 +74,9 @@ public interface ApiService {
     );
 
 
-
+    @GET("JobVacancy")
+    Call<List<JobVacancy>> getAllJobVacancy(
+            @Query("select") String select
+    );
 
 }

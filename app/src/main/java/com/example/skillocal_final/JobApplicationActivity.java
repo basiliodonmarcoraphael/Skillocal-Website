@@ -293,7 +293,7 @@ public class JobApplicationActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(JobApplicationActivity.this, "Update failed: " + response.message(), Toast.LENGTH_SHORT).show();
                     Log.e("API", "Update failed: " + response.message());
-                    Log.e("API", "Update failed: " + response);
+
                 }
             }
 
