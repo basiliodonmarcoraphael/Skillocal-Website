@@ -39,4 +39,9 @@ public interface ApiServiceJobVacancy {
     Call<Void> deleteJobVacancy(
             @Query("vacancy_id") String eqFilter // example: "eq.55"
     );
+
+    @GET("JobApplication")
+    Call<List<JobApplication>> getAllJobApplication(
+            @Query("select") String select
+    );
 }

@@ -15,10 +15,16 @@ import java.util.List;
 public class ApplicantsListActivity extends AppCompatActivity {
 
     private LinearLayout layoutApplicants;
+    private List<JobApplication> jobApplicants;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        JobApplicationList wrapper =
+                (JobApplicationList) getIntent().getSerializableExtra("applications_list");
+
+        assert wrapper != null;
+        jobApplicants = wrapper.getList();
         setContentView(R.layout.activity_applicants_list);
 
         layoutApplicants = findViewById(R.id.layout_applicants_list);
@@ -29,9 +35,9 @@ public class ApplicantsListActivity extends AppCompatActivity {
 
         // Sample applicants data (replace with real API data)
         List<Applicant> applicants = new ArrayList<>();
-        applicants.add(new Applicant("Juan Dela Cruz", "juan@example.com", "Resume: Experienced Barista"));
-        applicants.add(new Applicant("Maria Santos", "maria@example.com", "Resume: Skilled Cashier"));
-        applicants.add(new Applicant("Pedro Reyes", "pedro@example.com", "Resume: Retail Experience"));
+        for(JobApplication e: jobApplicants){
+            applicants.add(new Applicant(e.getFirstName()+ " "+ e.getMiddleName()+ " "+ e.getLastName(), e.getFirstName()+"@example.com", "Resume: Experienced Barista"));
+        }
 
         // Add applicants to layout
         for (Applicant applicant : applicants) {

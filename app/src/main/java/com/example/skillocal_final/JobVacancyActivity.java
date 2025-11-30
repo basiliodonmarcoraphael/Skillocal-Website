@@ -3,6 +3,7 @@ package com.example.skillocal_final;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,6 +25,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -39,6 +41,7 @@ public class JobVacancyActivity extends AppCompatActivity {
     private LinearLayout layoutJobs;
     private ArrayList<JobVacancy> jobs;
     private List<Establishment> establishments;
+    private List<JobApplication> jobApp;
     private List<Industry> industry;
     private List<String> empType;
     private SharedPreferences sharedPreferences;
@@ -93,32 +96,7 @@ public class JobVacancyActivity extends AppCompatActivity {
         searchIcon.setOnClickListener(v -> filterJobs(etSearch.getText().toString().toLowerCase()));
     }
 
-    private void loadJobs() {
-        // Load Establishments
-        apiExt.getEstablishmentByUserId("*", "eq." + currentId, "not.eq.Deleted", "establishment_id.asc")
-                .enqueue(new Callback<List<Establishment>>() {
-                    @Override
-                    public void onResponse(@NonNull Call<List<Establishment>> call, @NonNull Response<List<Establishment>> response) {
-                        if (response.isSuccessful()) establishments = response.body();
-                    }
-                    @Override
-                    public void onFailure(@NonNull Call<List<Establishment>> call, @NonNull Throwable t) {
-                        Log.e("API", "Failed: " + t.getMessage());
-                    }
-                });
-
-        // Load Industries
-        apiExt.getAllIndustry("*").enqueue(new Callback<List<Industry>>() {
-            @Override
-            public void onResponse(@NonNull Call<List<Industry>> call, @NonNull Response<List<Industry>> response) {
-                if (response.isSuccessful()) industry = response.body();
-            }
-            @Override
-            public void onFailure(@NonNull Call<List<Industry>> call, @NonNull Throwable t) {
-                Log.e("API", "Failed: " + t.getMessage());
-            }
-        });
-
+    private void jobsExt(){
         // Load Jobs
         api.getAllJobVacancyByUserId("*", "eq." + currentId, "vacancy_id.asc")
                 .enqueue(new Callback<List<JobVacancy>>() {
@@ -142,11 +120,80 @@ public class JobVacancyActivity extends AppCompatActivity {
                 });
     }
 
+    private void getAllApplicants(){
+        // Load Jobs
+        api.getAllJobApplication("*")
+                .enqueue(new Callback<List<JobApplication>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<JobApplication>> call, @NonNull Response<List<JobApplication>> response) {
+                        if (response.isSuccessful()) {
+                            jobApp = response.body();
+                            jobsExt();
+                        }
+                    }
+                    @Override
+                    public void onFailure(@NonNull Call<List<JobApplication>> call, @NonNull Throwable t) {
+                        Log.e("API", "Failed: " + t.getMessage());
+                    }
+                });
+    }
+
+    public List<JobApplication> filterByJobVacancyId(List<JobApplication> list, int jobVacancyId) {
+        List<JobApplication> result = new ArrayList<>();
+
+        if (list == null) {
+            Log.e("FILTER", "List is NULL — make sure API or DB returned data.");
+            return result; // return empty list instead of crashing
+        }
+
+        for (JobApplication app : list) {
+            if (app.getJob_vacancy_id() != null &&
+                    app.getJob_vacancy_id() == jobVacancyId) {
+                result.add(app);
+            }
+        }
+
+        return result;
+    }
+
+
+    private void loadJobs() {
+        // Load Establishments
+        apiExt.getEstablishmentByUserId("*", "eq." + currentId, "not.eq.Deleted", "establishment_id.asc")
+                .enqueue(new Callback<List<Establishment>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<Establishment>> call, @NonNull Response<List<Establishment>> response) {
+                        if (response.isSuccessful()){
+                            establishments = response.body();
+                            getAllApplicants();
+                        }
+                    }
+                    @Override
+                    public void onFailure(@NonNull Call<List<Establishment>> call, @NonNull Throwable t) {
+                        Log.e("API", "Failed: " + t.getMessage());
+                    }
+                });
+
+        // Load Industries
+        apiExt.getAllIndustry("*").enqueue(new Callback<List<Industry>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<Industry>> call, @NonNull Response<List<Industry>> response) {
+                if (response.isSuccessful()) industry = response.body();
+            }
+            @Override
+            public void onFailure(@NonNull Call<List<Industry>> call, @NonNull Throwable t) {
+                Log.e("API", "Failed: " + t.getMessage());
+            }
+        });
+    }
+
     private void addJobToLayout(JobVacancy job) {
         View itemView = LayoutInflater.from(this).inflate(R.layout.item_job_vacancy, layoutJobs, false);
         TextView tvJobInfo = itemView.findViewById(R.id.tv_job_name);
         ImageView btnEdit = itemView.findViewById(R.id.btn_edit_job);
         ImageView btnDelete = itemView.findViewById(R.id.btn_delete_job);
+        ImageView btnApplicant = itemView.findViewById(R.id.btn_applicant);
+        List<JobApplication> jobList = filterByJobVacancyId(jobApp, job.getVacancy_id());
 
         String estName = Objects.requireNonNull(findEstablishmentById(establishments, job.getEstablishment_id()))
                 .getEstablishmentName();
@@ -156,7 +203,8 @@ public class JobVacancyActivity extends AppCompatActivity {
                 + "\nRemarks: " + (job.getRemarks() != null ? job.getRemarks() : "")
                 + "\nCreated: " + job.getCreated_date()
                 + " | Reviewed: " + job.getReviewed_date()
-                + " by " + job.getReviewed_by();
+                + " by " + job.getReviewed_by()
+                + "\nApplicants: "+ jobList.size();
 
         tvJobInfo.setText(info);
 
@@ -165,6 +213,11 @@ public class JobVacancyActivity extends AppCompatActivity {
             deleteJobVacancy(job.getVacancy_id());
             layoutJobs.removeView(itemView);
             jobs.remove(job);
+        });
+        btnApplicant.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ApplicantsListActivity.class);
+            intent.putExtra("applications_list", new JobApplicationList(jobList));
+            startActivity(intent);
         });
 
         layoutJobs.addView(itemView);
