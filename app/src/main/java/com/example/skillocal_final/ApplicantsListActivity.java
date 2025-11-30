@@ -1,21 +1,70 @@
 package com.example.skillocal_final;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ApplicantsListActivity extends AppCompatActivity {
 
     private LinearLayout layoutApplicants;
     private List<JobApplication> jobApplicants;
+    private List<User> userList;
+
+    ApiService apiExt = ApiInstance.getApi();
+
+    public User findUserById(List<User> users, int userId) {
+        if (users == null) return null;
+
+        for (User u : users) {
+            if (u.getUserId() != null && u.getUserId() == userId) {
+                return u; // found the unique match
+            }
+        }
+        return null; // not found
+    }
+
+    private void getAllUsers(){
+        // Load Jobs
+        apiExt.getAllUsers("*")
+                .enqueue(new Callback<List<User>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<User>> call, @NonNull Response<List<User>> response) {
+                        if (response.isSuccessful()) {
+                            userList = response.body();
+
+                            // Sample applicants data (replace with real API data)
+                            List<Applicant> applicants = new ArrayList<>();
+                            for(JobApplication e: jobApplicants){
+                                String myEmail = findUserById(userList, e.getUser_id()).getEmail();
+                                applicants.add(new Applicant(e.getFirstName()+ " "+ e.getMiddleName()+ " "+ e.getLastName(), myEmail, "Resume: Experienced Barista"));
+                            }
+
+                            // Add applicants to layout
+                            for (Applicant applicant : applicants) {
+                                addApplicantCard(applicant);
+                            }
+                        }
+                    }
+                    @Override
+                    public void onFailure(@NonNull Call<List<User>> call, @NonNull Throwable t) {
+                        Log.e("API", "Failed: " + t.getMessage());
+                    }
+                });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +82,7 @@ public class ApplicantsListActivity extends AppCompatActivity {
         ImageView iconBack = findViewById(R.id.icon_back_applicants);
         iconBack.setOnClickListener(v -> finish());
 
-        // Sample applicants data (replace with real API data)
-        List<Applicant> applicants = new ArrayList<>();
-        for(JobApplication e: jobApplicants){
-            applicants.add(new Applicant(e.getFirstName()+ " "+ e.getMiddleName()+ " "+ e.getLastName(), e.getFirstName()+"@example.com", "Resume: Experienced Barista"));
-        }
-
-        // Add applicants to layout
-        for (Applicant applicant : applicants) {
-            addApplicantCard(applicant);
-        }
+        getAllUsers();
     }
 
     private void addApplicantCard(Applicant applicant) {

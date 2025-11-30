@@ -3,7 +3,7 @@ import java.io.Serializable;
 
 public class JobApplication implements Serializable {
     private int application_id;
-    private Integer user_id;
+    private int user_id;
     private String createdDate;
     private String firstName;
     private String middleName;
@@ -14,7 +14,7 @@ public class JobApplication implements Serializable {
 
     public JobApplication(){}
 
-    public JobApplication(Integer user_id, String createdDate, String firstName, String middleName,
+    public JobApplication(int user_id, String createdDate, String firstName, String middleName,
                           String lastName, String suffix, Integer job_vacancy_id,
                           String applicationStatus) {
 
@@ -34,7 +34,7 @@ public class JobApplication implements Serializable {
         return application_id;
     }
 
-    public Integer getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 

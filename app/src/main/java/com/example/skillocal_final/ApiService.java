@@ -17,6 +17,12 @@ public interface ApiService {
             @Query("select") String select            // usually: "*"
     );
 
+    //Get All Users
+    @GET("Users")
+    Call<List<User>> getAllUsers(
+            @Query("select") String select            // usually: "*"
+    );
+
     //    FOR USERS TABLE - Manage Employee Profile
     @GET("Users")
     Call<List<User>> getUserByUserId(
