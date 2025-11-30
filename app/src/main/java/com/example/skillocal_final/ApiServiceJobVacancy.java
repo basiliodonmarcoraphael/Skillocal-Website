@@ -26,7 +26,7 @@ public interface ApiServiceJobVacancy {
     );
 
     @POST("JobVacancy")
-    Call<JobVacancy> insertJobVacancy(@Body JobVacancy jobVacancy);
+    Call<Void> insertJobVacancy(@Body JobVacancy jobVacancy);
 
     // UPDATE JobVacancy - Use PATCH for partial updates
     @PATCH("JobVacancy")
@@ -38,5 +38,10 @@ public interface ApiServiceJobVacancy {
     @DELETE("JobVacancy")
     Call<Void> deleteJobVacancy(
             @Query("vacancy_id") String eqFilter // example: "eq.55"
+    );
+
+    @GET("JobApplication")
+    Call<List<JobApplication>> getAllJobApplication(
+            @Query("select") String select
     );
 }

@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuItem jMatch = menu.findItem(R.id.nav_job_matching);
         MenuItem jobsApplied = menu.findItem(R.id.nav_jobs_applied); // NEW
         MenuItem applicantList = menu.findItem(R.id.nav_applicants_list); // NEW
+        applicantList.setVisible(false);
 
         //Item to Hide based on role
         if(role.equals("Employer")){

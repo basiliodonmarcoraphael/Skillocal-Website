@@ -27,7 +27,7 @@ public class WorkExperience implements Serializable {
     }
 
     public Integer getWorkExperienceId(){return  work_experience_id;}
-    public Integer getUserId(){return user_id;}
+    public int getUserId(){return user_id;}
     public String getCompany(){return company;}
 
     public String getAddress(){return address;}
