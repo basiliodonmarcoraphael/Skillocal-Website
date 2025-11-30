@@ -26,7 +26,7 @@ public interface ApiServiceJobVacancy {
     );
 
     @POST("JobVacancy")
-    Call<JobVacancy> insertJobVacancy(@Body JobVacancy jobVacancy);
+    Call<Void> insertJobVacancy(@Body JobVacancy jobVacancy);
 
     // UPDATE JobVacancy - Use PATCH for partial updates
     @PATCH("JobVacancy")

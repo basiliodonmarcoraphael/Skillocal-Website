@@ -246,7 +246,7 @@ public class JobVacancyActivity extends AppCompatActivity {
                      estID, status, remark, created, reviewed, reviewedBy, title, indID, loc,
                     empTypeName, currentId);
 
-            if (jobObj == null) saveJobs(job);
+            if (jobObj == null) saveJobs(job, this);
             else updateJobVacancy(job, jobObj.getVacancy_id());
         });
 
@@ -271,15 +271,21 @@ public class JobVacancyActivity extends AppCompatActivity {
         }
     }
 
-    private void saveJobs(JobVacancy job) {
-        api.insertJobVacancy(job).enqueue(new Callback<JobVacancy>() {
+    private void saveJobs(JobVacancy job, Context cont) {
+        api.insertJobVacancy(job).enqueue(new Callback<Void>() {
             @Override
-            public void onResponse(@NonNull Call<JobVacancy> call, @NonNull Response<JobVacancy> response) {
-                if (response.isSuccessful()) loadJobs();
+            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                if (response.isSuccessful()){
+                    Toast.makeText(cont, "Successfully Saved", Toast.LENGTH_SHORT).show();
+                    loadJobs();
+                }else{
+                    Log.e("API", "Error body: " + response.errorBody());
+                    Toast.makeText(cont, "HTTP " + response.code(), Toast.LENGTH_SHORT).show();
+                }
             }
             @Override
-            public void onFailure(@NonNull Call<JobVacancy> call, @NonNull Throwable t) {
-                Log.e("API", "Network error: " + t.getMessage());
+            public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                Toast.makeText(cont, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 loadJobs();
             }
         });
