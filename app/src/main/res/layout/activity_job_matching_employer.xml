@@ -79,6 +79,20 @@
             android:src="@drawable/ic_search"
             android:contentDescription="Search"
             app:tint="@color/primary"/>
+
+
+        <Button
+            android:id="@+id/btnRunMatching"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Run Matching" />
+
+        <ProgressBar
+            android:id="@+id/progressMatching"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
     </LinearLayout>
 
     <!-- Scrollable list -->
@@ -99,5 +113,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="100dp"/>
     </ScrollView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

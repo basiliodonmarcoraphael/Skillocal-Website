@@ -20,6 +20,8 @@ public class User {
 
     private  String password;
 
+    public User(){} // for retrofit
+
 
 
     public User(
@@ -63,5 +65,13 @@ public class User {
     public String getContactNumber(){return contact_number;}
 
     public String getRole(){return role;}
+
+    public void setUser_id(int id){
+        this.user_id = id;
+    }
+
+    public void setFirstName(String name){
+        this.firstName = name;
+    }
 
 }
