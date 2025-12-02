@@ -159,6 +159,15 @@ public interface ApiServiceWorker {
             @Query("order") String order
     );
 
+    //worker's list of job vacancies coming from employers
+    @GET("JobVacancy")
+    Call<List<JobVacancy>> getAllJobVacancyByUserId(
+            @Query("select") String select,
+            @Query("user_id") String userID,
+            @Query("status") String statusFilter,
+            @Query("order") String order
+    );
+
     @GET("Establishment")
     Call<List<Establishment>> getEstablishmentByEstablishment(
             @Query("select") String select

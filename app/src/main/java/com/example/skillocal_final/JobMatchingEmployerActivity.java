@@ -168,7 +168,7 @@ public class JobMatchingEmployerActivity extends AppCompatActivity {
         executor.submit(() -> {
             try {
                 // 1) Fetch all active vacancies (All Vacancies across system)
-                Call<List<JobVacancy>> vacCall = apiWorker.getAllJobVacancy("*", "eq.Active", "vacancy_id.asc");
+                Call<List<JobVacancy>> vacCall = apiWorker.getAllJobVacancyByUserId("*", "eq."+ String.valueOf(currentId),"eq.Active", "vacancy_id.asc");
                 Response<List<JobVacancy>> vacResp = vacCall.execute();
 
                 if (!vacResp.isSuccessful() || vacResp.body() == null) {
