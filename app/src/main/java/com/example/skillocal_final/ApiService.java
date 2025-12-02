@@ -47,6 +47,14 @@ public interface ApiService {
     );
 
     @GET("Establishment")
+    Call<List<Establishment>> getEstablishmentById(
+            @Query("select") String select,
+            @Query("establishment_id") String id,
+            @Query("status") String statusFilter,
+            @Query("order") String order
+    );
+
+    @GET("Establishment")
     Call<List<Establishment>> getEstablishmentByUserId(
             @Query("select") String select,
             @Query("user_id") String userIdFilter,
